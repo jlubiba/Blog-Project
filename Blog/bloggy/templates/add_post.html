@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Making such that the title changes on the tab in ref to the base page -->
+{% block title%}
+Create A New Blog Post
+{% endblock %}
+
+{% block content %}
+    <h1>Add Post</h1><br>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn btn-secondary">Post</button>
+    </form>
+
+{% endblock %}

@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!-- Making such that the title changes on the tab in ref to the base page -->
+{% block title%}
+{{post.title}}
+{% endblock %}
+
 {% block content %}
     <h1>Post</h1>
     {% for post in object_list %}
     <li>
         <a href="{% url 'blog:article-details' post.pk %}">{{post.title}}</a> by {{post.author.first_name}} {{post.author.last_name}} <br>
-        {{post.body}}
+        {{post.body}} - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
     </li>
     {% endfor %}
 {% endblock %}
