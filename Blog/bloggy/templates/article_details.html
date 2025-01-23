@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Making such that the title changes on the tab in ref to the base page -->
+{% block title%}
+{{post.title}}
+{% endblock %}
+
+{% block content %}
+    <h1>{{post.title}}</h1>
+    <small>By: {{post.author.first_name}} {{post.author.last_name}}</small> <br>
+    <hr>
+    <br>
+    {{ post.body }}
+
+    <p>
+        <a href="{% url 'blog:home' %}" class="btn btn-primary">Back</a>
+    </p>
+{% endblock %}
