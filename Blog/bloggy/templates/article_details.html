@@ -8,10 +8,15 @@
 
 {% block content %}
     <h1>{{post.title}}</h1>
-    <small>By: {{post.author.first_name}} {{post.author.last_name}} - <a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small> <br>
+    <small>By: {{post.author.first_name}} {{post.author.last_name}}</small>
+        {% if user.is_authenticated %}
+        - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+        {% endif %}
     <hr>
     <br>
     {{ post.body }}
+    <br>
+    <br>
 
     <p>
         <a href="{% url 'blog:home' %}" class="btn btn-secondary">Back</a>

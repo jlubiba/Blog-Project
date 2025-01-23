@@ -11,7 +11,12 @@
     {% for post in object_list %}
     <li>
         <a href="{% url 'blog:article-details' post.pk %}">{{post.title}}</a> by {{post.author.first_name}} {{post.author.last_name}} <br>
-        {{post.body}} - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+        {{post.post_date}}<br>
+        <!-- The use of slice here is to reduce the amount of text displayed from the post.body. -->
+        {{post.body | slice:":150"}}
+        {% if user.is_authenticated %}
+        - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+        {% endif %}
     </li>
     {% endfor %}
 {% endblock %}

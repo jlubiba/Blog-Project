@@ -8,10 +8,15 @@ Create A New Blog Post
 
 {% block content %}
     <h1>Add Post</h1><br>
+    {% if user.is_authenticated %}
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
         <button class="btn btn-secondary">Post</button>
+        <button class="btn btn-danger"><a href="{% url 'blog:home' %}" style="text-decoration: none; color: white;">Cancel Post</a></button>
     </form>
+    {% else %}
+    <p>You are not allowed here. Login to access this page.</p>
+    {% endif %}
 
 {% endblock %}

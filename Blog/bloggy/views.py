@@ -14,8 +14,8 @@ from django.urls import reverse_lazy
 class HomeView(ListView):
     model = Post
     template_name = 'home.html'
-    ordering = ['-id'] # This makes it such that the articles are ordered such that the one higher id numbers are on top. It is advised to use dates its better.
-    
+    ordering = ['-post_date']
+
 class ArticleDetailsView(DetailView):
     model = Post
     template_name = 'article_details.html'

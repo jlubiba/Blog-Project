@@ -20,4 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("bloggy.urls")),
+    # The url below will handle our auth page using django, these two urls are necessary in this order
+    #Reference of LOGIN_REDIRECT_URL & LOGOUT_REDIRECT_URL in the settings.py is necessary to make 'login' and 'logout' easier just using those words in the links
+    path("members/", include("django.contrib.auth.urls")),
+    path("members/", include("members.urls")),
 ]
