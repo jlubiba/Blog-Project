@@ -10,7 +10,7 @@
     <h1>Post</h1>
     {% for post in object_list %}
     <li>
-        <a href="{% url 'blog:article-details' post.pk %}">{{post.title}}</a> by {{post.author.first_name}} {{post.author.last_name}} <br>
+        <a href="{% url 'blog:article-details' post.pk %}">{{post.title}}</a><small> - <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> by {{post.author.first_name}} {{post.author.last_name}} </small><br>
         {{post.post_date}}<br>
         <!-- The use of slice here is to reduce the amount of text displayed from the post.body. -->
         {{post.body | slice:":150"}}

@@ -10,4 +10,6 @@ urlpatterns = [
     path('article/edit/<int:pk>', views.UpdateArticleView.as_view(), name='update-post'),
     path('article/remove/<int:pk>', views.DeleteArticleView.as_view(), name='delete-post'),
     path('article/add-post/', views.AddPostView.as_view(), name='add-post'),
+    path('article/add-category/', views.AddCategorytView.as_view(), name='add-category'),
+    path('article/category/<str:category>/', views.FilterArticleCategorytView, name='blog-category'),
 ]

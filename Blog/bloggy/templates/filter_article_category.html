@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Making such that the title changes on the tab in ref to the base page -->
+{% block title%}
+{{post.title}}
+{% endblock %}
+
+{% block content %}
+    <h1>{{category | title}}</h1>
+    {% if posts %}
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'blog:article-details' post.pk %}">{{post.title}}</a><small> - <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> by {{post.author.first_name}} {{post.author.last_name}} </small><br>
+                {{post.post_date}}<br>
+                <!-- The use of slice here is to reduce the amount of text displayed from the post.body. -->
+                {{post.body | slice:":150"}}
+                {% if user.is_authenticated %}
+                - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+                {% endif %}
+            </li>
+        {% endfor %}
+    {% else %}
+        <h2>{{category}} is not a valid category.</h2>
+    {% endif %}
+{% endblock %}

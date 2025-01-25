@@ -8,7 +8,10 @@
 
 {% block content %}
     <h1>{{post.title}}</h1>
-    <small>By: {{post.author.first_name}} {{post.author.last_name}}</small>
+    <small>
+        - {{post.category}} <br>
+        By: {{post.author.first_name}} {{post.author.last_name}}
+    </small>
         {% if user.is_authenticated %}
         - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
         {% endif %}
