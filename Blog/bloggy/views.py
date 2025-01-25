@@ -15,10 +15,24 @@ class HomeView(ListView):
     model = Post
     template_name = 'home.html'
     ordering = ['-post_date']
+    
+    # This method that will allow for a context dict to be added onto the view
+    def get_context_data(self, *args,**kwargs):
+        category_list = Category.objects.all()
+        context = super(HomeView, self).get_context_data(*args, **kwargs) # The view inside is the view the method is used in
+        context['category_list'] = category_list
+        return context
 
 class ArticleDetailsView(DetailView):
     model = Post
     template_name = 'article_details.html'
+    
+    # This method that will allow for a context dict to be added onto the view
+    def get_context_data(self, *args,**kwargs):
+        category_list = Category.objects.all()
+        context = super(ArticleDetailsView, self).get_context_data(*args, **kwargs) # The view inside is the view the method is used in
+        context['category_list'] = category_list
+        return context
     
 class AddPostView(CreateView):
     model = Post
@@ -32,13 +46,22 @@ class AddCategorytView(CreateView):
 
 def FilterArticleCategorytView(request, category):
     items = Post.objects.filter(category=category)
-    cats = Category.objects.filter(name__icontains=category)
+    cats = Category.objects.filter(name=category)
+    category_list = Category.objects.all()
     context = {
         'category': category,
         'posts': items,
         'cats': cats,
+        'category_list': category_list,
     }
     return render(request, 'filter_article_category.html', context)
+
+def CategoryListView(request):
+    category_list = Category.objects.all()
+    context = {
+        'category_menu_list': category_list,
+    }
+    return render(request, 'categories.html', context)
 
 class UpdateArticleView(UpdateView):
     model = Post
