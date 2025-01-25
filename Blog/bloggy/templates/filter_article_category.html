@@ -7,8 +7,17 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{category | title}}</h1>
+    <h1>
+        {{category | title}}
+    </h1>
     {% if posts %}
+        {% for cat in cats %}
+            {% if user.is_authenticated %}
+            - <small><a href="{% url 'blog:update-category' cat.pk %}">Edit</a> <a href="{% url 'blog:delete-category' cat.pk %}">Delete</a></small>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Stating the post with the category -->
         {% for post in posts %}
             <li>
                 <a href="{% url 'blog:article-details' post.pk %}">{{post.title}}</a><small> - <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> by {{post.author.first_name}} {{post.author.last_name}} </small><br>
@@ -16,7 +25,7 @@
                 <!-- The use of slice here is to reduce the amount of text displayed from the post.body. -->
                 {{post.body | slice:":150"}}
                 {% if user.is_authenticated %}
-                - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+                - <small><a href="{% url 'blog:update-post' post.pk %}">Edit</a> <a href="{% url 'blog:delete-post' post.pk %}">Delete</a></small>
                 {% endif %}
             </li>
         {% endfor %}

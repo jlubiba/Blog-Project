@@ -32,9 +32,11 @@ class AddCategorytView(CreateView):
 
 def FilterArticleCategorytView(request, category):
     items = Post.objects.filter(category=category)
+    cats = Category.objects.filter(name__icontains=category)
     context = {
         'category': category,
-        'posts': items
+        'posts': items,
+        'cats': cats,
     }
     return render(request, 'filter_article_category.html', context)
 
@@ -46,4 +48,14 @@ class UpdateArticleView(UpdateView):
 class DeleteArticleView(DeleteView):
     model = Post
     template_name = 'delete_post.html'
+    success_url = reverse_lazy('blog:home') # This is added to redirect to the chosen page with the DeleteView avoid the following error: "No URL to redirect to. Provide a success_url."
+
+class UpdateCategoryView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'update_category.html'
+
+class DeleteCategoryView(DeleteView):
+    model = Category
+    template_name = 'delete_category.html'
     success_url = reverse_lazy('blog:home') # This is added to redirect to the chosen page with the DeleteView avoid the following error: "No URL to redirect to. Provide a success_url."

@@ -9,7 +9,7 @@
 {% block content %}
     <h1>{{post.title}}</h1>
     <small>
-        - {{post.category}} <br>
+        - <a href="{% url 'blog:blog-category' post.pk %}">{{post.category}}</a> <br>
         By: {{post.author.first_name}} {{post.author.last_name}}
     </small>
         {% if user.is_authenticated %}

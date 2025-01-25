@@ -12,4 +12,6 @@ urlpatterns = [
     path('article/add-post/', views.AddPostView.as_view(), name='add-post'),
     path('article/add-category/', views.AddCategorytView.as_view(), name='add-category'),
     path('article/category/<str:category>/', views.FilterArticleCategorytView, name='blog-category'),
+    path('article/category/edit/<int:pk>', views.UpdateCategoryView.as_view(), name='update-category'),
+    path('article/category/remove/<int:pk>', views.DeleteCategoryView.as_view(), name='delete-category'),
 ]
