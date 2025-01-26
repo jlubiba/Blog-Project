@@ -18,5 +18,9 @@ Create A New Blog Post
     {% else %}
     <p>You are not allowed here. Login to access this page.</p>
     {% endif %}
-
+<script>
+    // Fetching current user id and placing it on the form
+    let user_id = "{{user.id}}";
+    author_input = document.getElementById('author').value = user_id;
+</script>
 {% endblock %}

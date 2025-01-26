@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Post, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import PostForm, UpdateForm, CategoryForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 # def home(request):
@@ -23,6 +24,19 @@ class HomeView(ListView):
         context['category_list'] = category_list
         return context
 
+def LikedPostView(request, pk):
+    post = get_object_or_404(Post, id = request.POST.get('post_id'))
+    liked = False
+    
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    
+    return HttpResponseRedirect(reverse('blog:article-details', args=[str(pk)]))
+
 class ArticleDetailsView(DetailView):
     model = Post
     template_name = 'article_details.html'
@@ -31,7 +45,17 @@ class ArticleDetailsView(DetailView):
     def get_context_data(self, *args,**kwargs):
         category_list = Category.objects.all()
         context = super(ArticleDetailsView, self).get_context_data(*args, **kwargs) # The view inside is the view the method is used in
+        current_post = get_object_or_404(Post, id=self.kwargs['pk']) # Fetches the post for the current post's id
+        total_likes = current_post.total_likes()
+        
+        liked = False
+        if current_post.likes.filter(id=self.request.user.id).exists():
+            liked = True
+        
+        # adding context elements
         context['category_list'] = category_list
+        context['total_likes'] = total_likes
+        context['liked'] = liked
         return context
     
 class AddPostView(CreateView):
@@ -58,6 +82,7 @@ def FilterArticleCategorytView(request, category):
 
 def CategoryListView(request):
     category_list = Category.objects.all()
+    category_list = category_list.order_by('name')
     context = {
         'category_menu_list': category_list,
     }

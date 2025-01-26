@@ -15,7 +15,9 @@ Blog Posts - VG Blog
         <!-- The use of slice here is to reduce the amount of text displayed from the post.body. -->
         {{post.body | slice:":150"}}
         {% if user.is_authenticated %}
-        - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+            {% if user.id == post.author.id%}
+            - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+            {% endif %}
         {% endif %}
     </li>
     {% endfor %}

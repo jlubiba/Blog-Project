@@ -16,7 +16,8 @@ class PostForm(forms.ModelForm):
         #Styling the fields of the form with bootsrap
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'},),
-            'author': forms.Select(attrs={'class': 'form-control'}),
+            # 'author': forms.Select(attrs={'class': 'form-control'}),
+            'author': forms.TextInput(attrs={'class': 'form-control', 'value':'', 'id':'author', 'type':'hidden'}),
             'category': forms.Select(attrs={'class': 'form-control'}, choices = category_options), # The 'choices'  has be the first in line
             'body': forms.Textarea(attrs={'class': 'form-control'}),
         }
