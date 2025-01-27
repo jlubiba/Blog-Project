@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import PostForm, UpdateForm, CategoryForm
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from .forms import CommentForm
 
 # Create your views here.
 # def home(request):
@@ -37,6 +38,10 @@ def LikedPostView(request, pk):
     
     return HttpResponseRedirect(reverse('blog:article-details', args=[str(pk)]))
 
+class AddCommentPostView(CreateView):
+    model = Comment
+    form_class = CommentForm
+
 class ArticleDetailsView(DetailView):
     model = Post
     template_name = 'article_details.html'
@@ -47,6 +52,14 @@ class ArticleDetailsView(DetailView):
         context = super(ArticleDetailsView, self).get_context_data(*args, **kwargs) # The view inside is the view the method is used in
         current_post = get_object_or_404(Post, id=self.kwargs['pk']) # Fetches the post for the current post's id
         total_likes = current_post.total_likes()
+        current_post_comment = Comment.objects.select_related('post', 'author').filter(post = self.kwargs['pk'])
+        current_post_comment_number = current_post_comment.count()
+       
+        # a = []
+        # for i in current_post_comment:
+        #     a.append(i)
+        
+        # current_post_comment_number = a.count()
         
         liked = False
         if current_post.likes.filter(id=self.request.user.id).exists():
@@ -56,6 +69,8 @@ class ArticleDetailsView(DetailView):
         context['category_list'] = category_list
         context['total_likes'] = total_likes
         context['liked'] = liked
+        context['comment_form'] = CommentForm
+        context['current_post_comment_number'] = current_post_comment_number
         return context
     
 class AddPostView(CreateView):

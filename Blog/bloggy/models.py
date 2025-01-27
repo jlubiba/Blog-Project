@@ -31,4 +31,16 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('blog:article-details', args=[str(self.id)]) # The arg refers to the article that was just created's Id as the page to load to. A url without arguments wouldn't need it
         # return reverse('blog: home') # The arg refers to the article that was just created's Id as the page to load to. A url without arguments wouldn't need it
+        
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    body = models.TextField(verbose_name='Comment...')
+    post_date = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.post.title} by {self.author.username}'
+    
+    def get_absolute_url(self):
+        return reverse('blog:article-details', args=[str(self.post.pk)]) 
 

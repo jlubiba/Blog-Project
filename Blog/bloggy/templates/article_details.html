@@ -32,9 +32,9 @@
         {% csrf_token %}
         {% if user.is_authenticated %}
             {% if liked %}
-                <button class="btn btn-danger" name="post_id" value="{{ post.pk }}">Unlike</button> - {{total_likes}} Likes
+                <button class="btn btn-danger" name="post_id" value="{{ post.pk }}">Unlike | {{total_likes}} Likes</button> - {{total_likes}} Likes
             {% else%}
-                <button class="btn btn-primary" name="post_id" value="{{ post.pk }}">Like</button> - {{total_likes}} Likes
+                <button class="btn btn-primary" name="post_id" value="{{ post.pk }}">Like | {{total_likes}} Likes</button> - {{total_likes}} Likes
 
             {% endif%}
         {% else %}
@@ -42,4 +42,36 @@
 
         {% endif%}
     </form>
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'blog:post-comment' post.pk %}" method="POST">
+            {% csrf_token %}
+            {{comment_form}}
+            <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+    {% endif %}
+
+    <br><br>
+    {% if not post.comments.all %}
+    <h2>Comments:</h2>
+        No comments yet...
+    {% else %}
+    <h2>{{current_post_comment_number}} Comments:</h2>
+        {% for comment in post.comments.all %}
+            <strong>
+                {{ comment.author}}
+                {{ comment.post_date}}
+            </strong>
+            <p>
+                {{ comment.body }}
+            </p>
+        {% endfor %}
+    {% endif %}
+    <script>
+        // Fetching current user id and placing it on the form
+        let user_id = "{{user.id}}";
+        author_input = document.getElementById('author').value = user_id;
+        let post_id = "{{post.pk}}";
+        post_input = document.getElementById('post').value = post_id;
+    </script>
 {% endblock %}
