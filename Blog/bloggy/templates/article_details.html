@@ -55,8 +55,9 @@
     {% if not post.comments.all %}
     <h2>Comments:</h2>
         No comments yet...
+        {{post.comments.all|length}}
     {% else %}
-    <h2>{{current_post_comment_number}} Comments:</h2>
+    <h2>{{post.comments.all|length}} Comments:</h2>
         {% for comment in post.comments.all %}
             <strong>
                 {{ comment.author}}

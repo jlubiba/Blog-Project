@@ -16,9 +16,12 @@ Blog Categories - VG Blog
         <button type="button" class="list-group-item list-group-item-action">
           <a class="dropdown-item" href="{% url 'blog:blog-category' category %}">{{category}}
 
-        {% if user.is_authenticated %}
-        <small>- <a href="{% url 'blog:update-category' category.pk %}">Edit</a> <a href="{% url 'blog:delete-category' category.pk %}">Delete</a></small>
-      {% endif %}
+      <!-- Filters this information only for people in the manager group. -->
+      {% for group in user.groups.all%}
+        {% if "Manager" in group.name %}
+          <small>- <a href="{% url 'blog:update-category' category.pk %}">Edit</a> <a href="{% url 'blog:delete-category' category.pk %}">Delete</a></small>
+        {% endif %}
+      {% endfor %}
           </a>
         </button>
       </div>
