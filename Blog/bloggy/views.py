@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import PostForm, UpdateForm, CategoryForm
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 from .forms import CommentForm
 
 # Create your views here.
@@ -81,11 +82,16 @@ def FilterArticleCategorytView(request, category):
     items = Post.objects.filter(category=category)
     cats = Category.objects.filter(name=category)
     category_list = Category.objects.all()
+    paginator = Paginator(items, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
         'category': category,
         'posts': items,
         'cats': cats,
         'category_list': category_list,
+        'page_obj': page_obj,
+        'paginator': paginator,
     }
     return render(request, 'filter_article_category.html', context)
 

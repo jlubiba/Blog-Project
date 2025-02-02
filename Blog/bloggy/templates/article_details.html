@@ -73,11 +73,13 @@
 
     {% endif%}
     </form>
+<br>
+<h2>Comments:</h2>
 
 {% if user.is_authenticated %}
     <form class="col-md-8" action="{% url 'blog:post-comment' post.pk %}" method="POST">
         {% csrf_token %}
-        {{comment_form}}
+        {{comment_form }}
         <button type="submit" class="btn btn-primary">Comment</button>
     </form>
 {% endif %}
@@ -98,23 +100,6 @@
         </p>
     {% endfor %}
 {% endif %}
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
 <script>
     // Fetching current user id and placing it on the form
     let user_id = "{{user.id}}";

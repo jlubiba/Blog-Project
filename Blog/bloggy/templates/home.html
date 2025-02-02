@@ -33,50 +33,51 @@ Blog Posts - VG Blog
                     {% endif %}
                 {% endif %}
               </small>
-              <p class="blog-post-meta">{{post.post_date}} <small> - <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> by {{post.author.first_name}} {{post.author.last_name}} </small>
+              <p class="blog-post-meta">{{post.post_date}} <small> - 
+                <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> by
+                {% if post.author.first_name %}
+                    {{post.author.first_name}} {{post.author.last_name}}
+                {% else %}
+                    {{post.author}}
+                {% endif %}
+            </small>
       
-              <p>This blog post shows a few different types of content that’s supported and styled with Bootstrap. Basic typography, lists, tables, images, code, and more are all supported as expected.</p>
+              <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, lists, tables, images, code, and more are all supported as expected.</p>
               <hr>
             {% endfor %}
             </article>
       
             <!-- Pagination section -->
+            {% if page_obj.paginator.num_pages == 1%}
+            {% else%}
             <div class="pagination">
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page=1">&Lang;</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lang;</a>
+                      </li>
+                      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                      {% endif %}
+                      <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="#">{{ page_obj.number }}</a>
+                      </li>
+                      {% if page_obj.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&rang;</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&Rang;</a>
+                      </li>
+                      {% endif %}
+                    </ul>
+                  </nav>
             </div>
-            <!-- <nav aria-label="...">
-                <ul class="pagination">
-                  <li class="page-item disabled">
-                    <a class="page-link">Previous</a>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">2</a>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                  </li>
-                </ul>
-              </nav> -->
-            <!-- <nav class="blog-pagination" aria-label="Pagination">
-              <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-              <a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
-            </nav> -->
+            {% endif %}
       
           </div>
           

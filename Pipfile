@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
+django-ckeditor = "*"
+django-widget-tweaks = "*"
 
 [dev-packages]
 
