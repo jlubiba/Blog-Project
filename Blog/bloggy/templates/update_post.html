@@ -12,6 +12,7 @@ Edit - {{post.title}}
     {% if user.is_authenticated %}
     <form method="POST">
         {% csrf_token %}
+        {{form.media}}
         {{form.as_p}}
         <button class="btn btn-secondary">Update</button>
         <button class="btn btn-danger"><a href="{% url 'blog:article-details' post.pk %}" style="text-decoration: none; color: white;">Cancel Update</a></button>

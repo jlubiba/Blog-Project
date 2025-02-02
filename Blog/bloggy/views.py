@@ -17,12 +17,15 @@ class HomeView(ListView):
     model = Post
     template_name = 'home.html'
     ordering = ['-post_date']
+    paginate_by = 5
     
     # This method that will allow for a context dict to be added onto the view
     def get_context_data(self, *args,**kwargs):
         category_list = Category.objects.all()
+        recent_post = Post.objects.all().order_by('-post_date')[:4]
         context = super(HomeView, self).get_context_data(*args, **kwargs) # The view inside is the view the method is used in
         context['category_list'] = category_list
+        context['recent_post'] = recent_post
         return context
 
 def LikedPostView(request, pk):

@@ -7,72 +7,120 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{post.title}}</h1>
-    <small>
-        - <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> <br>
-        By: {{post.author.first_name}} {{post.author.last_name}}
-    </small>
-        {% if user.is_authenticated %}
-            {% if user.id == post.author.id%}
-            - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+<main class="container">
+    <br>
+  <!-- Current post -->
+    <div class="row g-5">
+      <div class="col-md-8">
+        <article class="blog-post">
+          <h2 class="display-5 link-body-emphasis mb-1">
+            <a href="{% url 'blog:article-details' post.pk %}" style="text-decoration: none; color: black;">
+            {{post.title}}
+            </a>
+          </h2>
+          <small>
+            {% if user.is_authenticated %}
+                {% if user.id == post.author.id%}
+                    - <small><a href="{% url 'blog:update-post' post.pk%}">Edit</a> <a href="{% url 'blog:delete-post' post.pk%}">Delete</a></small>
+                {% endif %}
             {% endif %}
-        {% endif %}
-    <hr>
-    <br>
-    {{ post.body }}
-    <br>
-    <br>
-
+          </small>
+          <p class="blog-post-meta">{{post.post_date}} <small> - <a href="{% url 'blog:blog-category' post.category %}">{{post.category}}</a> by {{post.author.first_name}} {{post.author.last_name}} </small>
+  
+          <p>{{post.body | safe }}</p>
+        </article>
+  
+      </div>
+      
+      <!-- Start of the side-bar -->
+       
+      <!-- Short description to tell your visitors a little bit about your publication, writers, content, or something else entirely -->
+      <div class="col-md-4">
+        <div class="position-sticky" style="top: 2rem;">
+          <div class="p-4 mb-3 bg-body-tertiary rounded">
+            <h4 class="fst-italic">About</h4>
+            <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+          </div>
+        
+          <!-- Other platform to have access -->
+          <div class="p-4">
+            <h4 class="fst-italic">Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
     <p>
         <a href="{% url 'blog:home' %}" class="btn btn-secondary">Back</a>
     </p>
+  <!-- Comment secction edit -->
     <hr>
-    <br><br>
-    <form action="{% url 'blog:post-like' post.pk %}" method="POST">
-        {% csrf_token %}
-        {% if user.is_authenticated %}
-            {% if liked %}
-                <button class="btn btn-danger" name="post_id" value="{{ post.pk }}">Unlike | {{total_likes}} Likes</button> - {{total_likes}} Likes
-            {% else%}
-                <button class="btn btn-primary" name="post_id" value="{{ post.pk }}">Like | {{total_likes}} Likes</button> - {{total_likes}} Likes
-
-            {% endif%}
-        {% else %}
-            <a href="{% url 'login' %}">Login</a> to be able to like - {{total_likes}} Likes
+  <form action="{% url 'blog:post-like' post.pk %}" method="POST">
+    {% csrf_token %}
+    {% if user.is_authenticated %}
+        {% if liked %}
+            <button class="btn btn-danger" name="post_id" value="{{ post.pk }}">Dislike | {{total_likes}} Likes</button> - {{total_likes}} Likes
+        {% else%}
+            <button class="btn btn-primary" name="post_id" value="{{ post.pk }}">Like | {{total_likes}} Likes</button> - {{total_likes}} Likes
 
         {% endif%}
+    {% else %}
+        <a href="{% url 'login' %}">Login</a> to be able to like - {{total_likes}} Likes
+
+    {% endif%}
     </form>
 
-    {% if user.is_authenticated %}
-        <form action="{% url 'blog:post-comment' post.pk %}" method="POST">
-            {% csrf_token %}
-            {{comment_form}}
-            <button type="submit" class="btn btn-primary">Comment</button>
-        </form>
-    {% endif %}
+{% if user.is_authenticated %}
+    <form class="col-md-8" action="{% url 'blog:post-comment' post.pk %}" method="POST">
+        {% csrf_token %}
+        {{comment_form}}
+        <button type="submit" class="btn btn-primary">Comment</button>
+    </form>
+{% endif %}
 
-    <br><br>
-    {% if not post.comments.all %}
-    <h2>Comments:</h2>
-        No comments yet...
-        {{post.comments.all|length}}
-    {% else %}
-    <h2>{{post.comments.all|length}} Comments:</h2>
-        {% for comment in post.comments.all %}
-            <strong>
-                {{ comment.author}}
-                {{ comment.post_date}}
-            </strong>
-            <p>
-                {{ comment.body }}
-            </p>
-        {% endfor %}
-    {% endif %}
-    <script>
-        // Fetching current user id and placing it on the form
-        let user_id = "{{user.id}}";
-        author_input = document.getElementById('author').value = user_id;
-        let post_id = "{{post.pk}}";
-        post_input = document.getElementById('post').value = post_id;
-    </script>
+<br><br>
+{% if not post.comments.all %}
+<h2>Comments:</h2>
+    No comments yet...
+{% else %}
+<h2>{{post.comments.all|length}} Comments:</h2>
+    {% for comment in post.comments.all %}
+        <strong>
+            {{ comment.author}}
+            {{ comment.post_date}}
+        </strong>
+        <p>
+            {{ comment.body }}
+        </p>
+    {% endfor %}
+{% endif %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<script>
+    // Fetching current user id and placing it on the form
+    let user_id = "{{user.id}}";
+    author_input = document.getElementById('author').value = user_id;
+    let post_id = "{{post.pk}}";
+    post_input = document.getElementById('post').value = post_id;
+</script>
+  </main>
 {% endblock %}

@@ -11,7 +11,8 @@ Create A New Blog Post
     {% if user.is_authenticated %}
     <form method="POST">
         {% csrf_token %}
-        {{form.as_p}}
+        {{form.media}}
+        {{form.as_p | safe}}
         <button class="btn btn-secondary">Post</button>
         <button class="btn btn-danger"><a href="{% url 'blog:home' %}" style="text-decoration: none; color: white;">Cancel Post</a></button>
     </form>
