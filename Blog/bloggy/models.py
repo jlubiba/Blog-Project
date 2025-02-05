@@ -7,6 +7,7 @@ from ckeditor.fields import RichTextField
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField(max_length=230)
     
     def __str__(self):
         return f'{self.name}'
@@ -18,7 +19,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     body = RichTextField()
     post_date = models.DateField(auto_now_add=True)
-    category = models.CharField(max_length=255, default='uncategorized')
+    snippet = models.TextField(max_length=230)
+    category = models.CharField(max_length=255)
     likes = models.ManyToManyField(User, related_name='post_likes')
     
     def total_likes(self):

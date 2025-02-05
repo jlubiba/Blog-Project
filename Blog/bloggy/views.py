@@ -79,8 +79,9 @@ class AddCategorytView(CreateView):
     template_name = 'add_category.html'
 
 def FilterArticleCategorytView(request, category):
-    items = Post.objects.filter(category=category)
+    items = Post.objects.filter(category=category).order_by('-post_date')
     cats = Category.objects.filter(name=category)
+    recent_post = items.order_by('-post_date')[:4]
     category_list = Category.objects.all()
     paginator = Paginator(items, 5)
     page_number = request.GET.get('page')
@@ -92,6 +93,7 @@ def FilterArticleCategorytView(request, category):
         'category_list': category_list,
         'page_obj': page_obj,
         'paginator': paginator,
+        'recent_post': recent_post,
     }
     return render(request, 'filter_article_category.html', context)
 

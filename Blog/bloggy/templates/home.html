@@ -42,7 +42,7 @@ Blog Posts - VG Blog
                 {% endif %}
             </small>
       
-              <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, lists, tables, images, code, and more are all supported as expected.</p>
+              <p>{{post.snippet}}</p>
               <hr>
             {% endfor %}
             </article>
@@ -98,7 +98,7 @@ Blog Posts - VG Blog
                 <ul class="list-unstyled">
                     {% for post in recent_post %}
                   <li>
-                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="{% url 'blog:article-details' post.pk %}">
                       <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
                       <div class="col-lg-8">
                         <h6 class="mb-0">{{post.title}}</h6>
