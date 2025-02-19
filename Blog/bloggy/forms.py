@@ -1,7 +1,7 @@
 from django import forms
 from .models import Post, Category, Comment
 
-category_options = Category.objects.all().values_list('name', 'name') # This returns an obaject with a list a queryset
+category_options = Category.objects.all().values_list('name', 'name') # This returns an object with a list a queryset
 
 # Turning the 'category_options' queryset into a python list to use for choices
 category_options_list = []
